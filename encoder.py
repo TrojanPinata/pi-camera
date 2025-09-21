@@ -1,0 +1,50 @@
+import RPi.GPIO as GPIO
+import time
+import board
+
+# Shutter Speed Dial
+SS_SW =  4
+SS_DT =  17
+SS_CLK = 18
+
+# EV Compensation Dial
+EV_SW =  3
+EV_DT =  5
+EV_CLK = 6
+
+
+class Encoder:
+
+   def __init__(self, sw, dt, clk, starting_index):
+      self.sw = sw
+      self.dt = dt
+      self.clk = clk
+
+      GPIO.setmode(GPIO.BCM)
+      GPIO.setup(clk, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+      GPIO.setup(dt, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+
+      self.last_state = GPIO.input(clk)
+      self.index = starting_index
+
+
+   def check_switch(self):
+      if GPIO.input(self.sw) == 0:
+         return True
+      return False
+   
+   def check_encoder(self):
+      clk_state = GPIO.input(self.clk)
+      dt_state = GPIO.input(self.dt)
+      if clk_state != self.last_state:
+         if dt_state != clk_state:
+            self.index += 1
+         else:
+            self.index -= 1
+      self.last_state = clk_state
+      return self.index
+
+   
+
+
+
