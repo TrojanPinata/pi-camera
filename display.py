@@ -21,8 +21,8 @@ ISO_STRINGS             = ["100", "200", "400", "800", "1600"]
 DISPLAY_CLK    = board.SCLK
 DISPLAY_MOSI   = board.MOSI
 DISPLAY_MISO   = board.MISO
-DISPLAY_CS     = digitalio.DigitalInOut(board.CE0)
-SD_CS          = digitalio.DigitalInOut(board.CE1)
+DISPLAY_CS     = board.CE0
+SD_CS          = board.CE1
 DISPLAY_DC     = digitalio.DigitalInOut(board.D25)
 DISPLAY_RST    = digitalio.DigitalInOut(board.D24)
 
