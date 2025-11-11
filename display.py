@@ -1,9 +1,9 @@
 import RPi.GPIO as GPIO
-import time, storage, busio
+import time, busio
 import board
 import digitalio
 from PIL import Image, ImageDraw
-import adafruit_rgb_display.ili9341 as ili9341
+import adafruit_rgb_display.st7735 as st7735
 
 # UART Reserved = 14, 15
 
@@ -31,7 +31,7 @@ class Display:
 
    def __init__(self):
       self.spi = board.SPI()
-      self.disp = ili9341.ILI9341(self.spi, DISPLAY_CS, DISPLAY_DC, DISPLAY_RST)
+      self.disp = st7735.ST7735R(self.spi, DISPLAY_CS, DISPLAY_DC, DISPLAY_RST, baudrate=24000000)
       self.width = self.disp.width
       self.height = self.disp.height
       self.ss_string = SHUTTER_SPEED_STRINGS[10]

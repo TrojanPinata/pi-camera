@@ -3,9 +3,9 @@ import time
 import board
 
 # Shutter Speed Dial
-SS_SW =  4
+SS_SW =  18
 SS_DT =  17
-SS_CLK = 18
+SS_CLK = 4
 
 # EV Compensation Dial
 EV_SW =  3
@@ -21,15 +21,15 @@ class Encoder:
       self.clk = clk
 
       GPIO.setmode(GPIO.BCM)
-      GPIO.setup(clk, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-      GPIO.setup(dt, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+      GPIO.setup(clk, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+      GPIO.setup(dt, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
       self.last_state = GPIO.input(clk)
       self.index = starting_index
 
 
    def check_switch(self):
-      if GPIO.input(self.sw) == 0:
+      if GPIO.input(self.sw) == 1:
          return True
       return False
    

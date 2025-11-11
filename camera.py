@@ -105,7 +105,7 @@ class Camera:
       im.save(filename)
       logger.info("Saved conversion in " + filename)
       self.last_file = filename
-      # remove original raw?
+      # remove original raw? nah
 
    def set_capture_time(self, capture_time):
       self.preview_started = False
@@ -122,7 +122,7 @@ def main():
          logger.info('  SD card found')
          path = OUTPUT_PATH
       else:
-         logger.info('  No SD card found over SPI in TFT reader. Defaulting to /home/camera/DCIM')
+         logger.info('  No SD card found over SPI in TFT reader. Defaulting to ~/DCIM')
          path = BACKUP_OUTPUT_PATH
 
       # check DCIM folder exists
@@ -156,5 +156,5 @@ def main():
       GPIO.cleanup()
 
 
-def __init__():
+if __name__=="__main__":
    main()
