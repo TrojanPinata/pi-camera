@@ -30,7 +30,7 @@ class Display:
 
    def __init__(self):
       self.spi = board.SPI()
-      self.disp = st7735.ST7735R(self.spi, rotation=90, cs=DISPLAY_CS, dc=DISPLAY_DC, rst=DISPLAY_RST, baudrate=24000000)
+      self.disp = st7735.ST7735R(self.spi, rotation=0, cs=DISPLAY_CS, dc=DISPLAY_DC, rst=DISPLAY_RST, baudrate=24000000)
       self.width = self.disp.width
       self.height = self.disp.height
       print(str(self.width) + " " + str(self.height))
@@ -45,15 +45,16 @@ class Display:
    def black_screen(self):
       width = self.disp.width
       height = self.disp.height
-      image = Image.new("RGB", (width - 1, height - 1))
-      image = image.resize((width - 1, height - 1))
+      image = Image.new("RGB", (width, height), (0, 0, 0))
+      print(f"Image size: {image.size}, Display: ({self.disp.width}, {self.disp.height})")
+
       self.disp.image(image)
 
 
    def show_capture(self, filename):
       try:
          image = Image.open(filename)
-         image = image.resize((self.disp.width, self.disp.height))
+         image = image.resize((self.disp.width, self.disp.height), Image.LANCZOS)
          image = image.convert("RGB")
          self.disp.image(image)
 
@@ -66,7 +67,7 @@ class Display:
       try:
          frame = camera.capture_array("main")
          image = Image.fromarray(frame)
-         image = image.resize((self.disp.width, self.disp.height))
+         image = image.resize((self.disp.width, self.disp.height), Image.LANCZOS)
          image = image.convert("RGB")
          draw = ImageDraw.Draw(image)
 
@@ -79,6 +80,9 @@ class Display:
          draw.text((4, self.disp.height - 16), ss_text, font=font, fill=(255, 255, 255))
          draw.text((self.disp.width - 60, self.disp.height - 16), ev_text, font=font, fill=(255, 255, 255))
    
+         image = image.crop((0, 0, self.disp.width, self.disp.height))
+         print(f"Image size: {image.size}, Display: ({self.disp.width}, {self.disp.height})")
+
          self.disp.image(image)
 
       except Exception as e:

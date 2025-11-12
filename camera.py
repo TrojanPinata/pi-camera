@@ -90,15 +90,17 @@ class Camera:
             self.display.show_viewfinder(self.camera)
 
       if state == BLANK:
-         self.display.blank_screen()
+         self.display.black_screen()
       
       if state == PREVIEW:
          self.display.show_capture(self.last_file)
 
    
    def capture(self, path):
-
+      self.camera.stop()
       self.camera.configure(self.still_config)
+      self.camera.start()
+
       filename = path + f"/RPC_{datetime.now().strftime("%Y%m%d%H%M%S")}"
       filename_dng = filename + ".dng"
       filename_jpg = filename + ".jpg"
@@ -107,7 +109,10 @@ class Camera:
       logger.info("Saving capture in " + filename_jpg)
       self.camera.capture_file(filename_jpg)
       self.last_file = filename_jpg
+
+      self.camera.stop()
       self.camera.configure(self.preview_config)
+      self.camera.start()
 
    def set_capture_time(self, capture_time):
       self.preview_started = False
@@ -145,7 +150,7 @@ def main():
          cam.viewfinder(VF)
          if capture:
             cam.viewfinder(BLANK)
-            cam.capture()
+            cam.capture(path)
             cam.set_capture_time(datetime.now().strftime("%Y%m%d%H%M%S"))
 
    finally:
