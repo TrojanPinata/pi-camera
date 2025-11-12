@@ -39,15 +39,17 @@ class Encoder:
       clk_state = GPIO.input(self.clk)
       dt_state = GPIO.input(self.dt)
       if clk_state != self.last_state:
-         if dt_state != clk_state:
+         if dt_state == clk_state:
             self.index += 1
          else:
             self.index -= 1
 
          if (self.index < 0):
-            self.index = 0
-         if (self.index > self.max_index):
             self.index = self.max_index
+         if (self.index > self.max_index):
+            self.index = 0
+
+         time.sleep(0.004)
       self.last_state = clk_state
       return self.index
 
