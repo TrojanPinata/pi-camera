@@ -17,7 +17,7 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setup(POWER_SWITCH, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 OUTPUT_PATH = "/mnt/tft"
-BACKUP_OUTPUT_PATH = "/home/camera"
+BACKUP_OUTPUT_PATH = "~"
 
 WHITE_BALANCE =   "auto"
 DENOISE =         "auto"
