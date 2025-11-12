@@ -33,8 +33,8 @@ class Camera:
 
    def __init__(self):
       logger.info('  Starting encoders')
-      self.ss_encoder = Encoder(SS_SW, SS_DT, SS_CLK, 10)
-      self.ev_encoder = Encoder(EV_SW, EV_DT, EV_CLK, 0)
+      self.ss_encoder = Encoder(SS_SW, SS_DT, SS_CLK, 10, len(SHUTTER_SPEEDS))
+      self.ev_encoder = Encoder(EV_SW, EV_DT, EV_CLK, 2, len(ISO))
       logger.info('  Starting display')
       self.display = Display()
 

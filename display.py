@@ -77,6 +77,7 @@ class Display:
 
          ss_text = f"{self.ss_string}s"
          ev_text = f"ISO {self.ev_string}"
+         print(ss_text + " " + ev_text)
 
          draw.text((4, self.disp.height - 16), ss_text, font=font, fill=(255, 255, 255))
          draw.text((self.disp.width - 60, self.disp.height - 16), ev_text, font=font, fill=(255, 255, 255))

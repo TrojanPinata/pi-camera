@@ -15,7 +15,7 @@ EV_CLK = 6
 
 class Encoder:
 
-   def __init__(self, sw, dt, clk, starting_index):
+   def __init__(self, sw, dt, clk, starting_index, max_index):
       self.sw = sw
       self.dt = dt
       self.clk = clk
@@ -27,6 +27,7 @@ class Encoder:
 
       self.last_state = GPIO.input(clk)
       self.index = starting_index
+      self.max_index = max_index
 
 
    def check_switch(self):
@@ -42,6 +43,10 @@ class Encoder:
             self.index += 1
          else:
             self.index -= 1
+         if (self.index < 0):
+            self.index = 0
+         if (self.index < 0):
+            self.index = self.max_index
       self.last_state = clk_state
       return self.index
 
