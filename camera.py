@@ -4,7 +4,7 @@ import board
 import digitalio
 from PIL import Image, ImageDraw
 import numpy as np
-from picamera2 import Picamera2, Preview
+from picamera2 import Picamera2, Preview, DngWriter
 from datetime import datetime
 
 from encoder import *
@@ -102,10 +102,12 @@ class Camera:
       self.camera.start()
 
       filename = path + f"/RPC_{datetime.now().strftime("%Y%m%d%H%M%S")}"
-      filename_dng = filename + ".dng"
+      filename_dng = filename + ".raw"
       filename_jpg = filename + ".jpg"
       logger.info("Saving capture in " + filename_dng)
-      self.camera.capture_file(filename_dng)
+      raw_request = self.camera.capture_request()
+      dng_writer = DngWriter(self.camera)
+      dng_writer.save(filename_dng, raw_request)
       logger.info("Saving capture in " + filename_jpg)
       self.camera.capture_file(filename_jpg)
       self.last_file = filename_jpg
