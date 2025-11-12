@@ -23,6 +23,7 @@ class Encoder:
       GPIO.setmode(GPIO.BCM)
       GPIO.setup(clk, GPIO.IN, pull_up_down=GPIO.PUD_UP)
       GPIO.setup(dt, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+      GPIO.setup(sw, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
       self.last_state = GPIO.input(clk)
       self.index = starting_index

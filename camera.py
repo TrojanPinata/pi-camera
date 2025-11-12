@@ -82,7 +82,7 @@ class Camera:
 
    def viewfinder(self, state):
       if state == VF:
-         if time.now() - self.last_capture_time < PREVIEW_CAPTURE_TIME:
+         if datetime.now() - self.last_capture_time < PREVIEW_CAPTURE_TIME:
             if self.preview_started == False:
                self.display.show_capture(self.last_file)
                self.preview_started = True
@@ -146,7 +146,7 @@ def main():
          if capture:
             cam.viewfinder(BLANK)
             cam.capture()
-            cam.set_capture_time(time.now())
+            cam.set_capture_time(datetime.now())
 
    finally:
       cam.camera.close()
