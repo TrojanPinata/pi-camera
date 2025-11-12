@@ -33,7 +33,6 @@ class Display:
       self.disp = st7735.ST7735R(self.spi, rotation=0, cs=DISPLAY_CS, dc=DISPLAY_DC, rst=DISPLAY_RST, baudrate=24000000)
       self.width = self.disp.width
       self.height = self.disp.height
-      print(str(self.width) + " " + str(self.height))
       self.ss_string = SHUTTER_SPEED_STRINGS[10]
       self.ev_string = ISO_STRINGS[0]
 
@@ -55,6 +54,9 @@ class Display:
          image = Image.open(filename)
          image = image.resize((self.disp.width, self.disp.height), Image.LANCZOS)
          image = image.convert("RGB")
+         ss_text = f"{self.ss_string}s"
+         ev_text = f"ISO {self.ev_string}"
+         print(ss_text + " " + ev_text)
          self.disp.image(image)
 
       except Exception as e:
