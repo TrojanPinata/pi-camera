@@ -43,9 +43,10 @@ class Encoder:
             self.index += 1
          else:
             self.index -= 1
+
          if (self.index < 0):
             self.index = 0
-         if (self.index < 0):
+         if (self.index > self.max_index):
             self.index = self.max_index
       self.last_state = clk_state
       return self.index

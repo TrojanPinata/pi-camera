@@ -30,7 +30,7 @@ class Display:
 
    def __init__(self):
       self.spi = board.SPI()
-      self.disp = st7735.ST7735R(self.spi, rotation=0, cs=DISPLAY_CS, dc=DISPLAY_DC, rst=DISPLAY_RST, baudrate=24000000)
+      self.disp = st7735.ST7735R(self.spi, rotation=0, cs=DISPLAY_CS, dc=DISPLAY_DC, rst=DISPLAY_RST, baudrate=8000000)
       self.width = self.disp.width
       self.height = self.disp.height
       self.ss_string = SHUTTER_SPEED_STRINGS[10]
