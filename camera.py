@@ -97,17 +97,18 @@ class Camera:
 
    
    def capture(self, path):
+      print("Capturing image...")
       self.camera.stop()
       self.camera.configure(self.still_config)
       self.camera.start()
 
-      filename = path + f"/RPC_{datetime.now().strftime("%Y%m%d%H%M%S")}"
-      filename_dng = filename + ".raw"
+      filename = path + f"/DCIM/RPC_{datetime.now().strftime("%Y%m%d%H%M%S")}"
+      #filename_dng = filename + ".dng"
       filename_jpg = filename + ".jpg"
-      logger.info("Saving capture in " + filename_dng)
-      self.camera.capture_file(filename_dng, 'raw')
+      logger.info("Saving capture in " + filename)
+      self.camera.capture_file(filename, 'raw')
       logger.info("Saving capture in " + filename_jpg)
-      self.camera.capture_file(filename_jpg, 'jpeg')
+      self.camera.capture_file(filename_jpg)
       self.last_file = filename_jpg
 
       self.camera.stop()
@@ -116,7 +117,7 @@ class Camera:
 
    def set_capture_time(self, capture_time):
       self.preview_started = False
-      self.last_capture_time = capture_time
+      self.last_capture_time = int(capture_time)
 
 
 def main():

@@ -46,7 +46,6 @@ class Display:
       width = self.disp.width
       height = self.disp.height
       image = Image.new("RGB", (width, height), (0, 0, 0))
-      print(f"Image size: {image.size}, Display: ({self.disp.width}, {self.disp.height})")
 
       self.disp.image(image)
 
@@ -81,8 +80,6 @@ class Display:
          draw.text((self.disp.width - 60, self.disp.height - 16), ev_text, font=font, fill=(255, 255, 255))
    
          image = image.crop((0, 0, self.disp.width, self.disp.height))
-         print(f"Image size: {image.size}, Display: ({self.disp.width}, {self.disp.height})")
-
          self.disp.image(image)
 
       except Exception as e:
