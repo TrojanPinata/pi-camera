@@ -4,7 +4,7 @@ import board
 import digitalio
 from PIL import Image, ImageDraw
 import numpy as np
-from picamera2 import Picamera2
+from picamera2 import Picamera2, Preview
 from datetime import datetime
 
 from encoder import *
@@ -12,9 +12,7 @@ from display import *
 
 logger = logging.getLogger(__name__)
 
-POWER_SWITCH = 26
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(POWER_SWITCH, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 OUTPUT_PATH = "/mnt/tft"
 BACKUP_OUTPUT_PATH = "~"
@@ -38,13 +36,20 @@ class Camera:
       self.ss_encoder = Encoder(SS_SW, SS_DT, SS_CLK, 10)
       self.ev_encoder = Encoder(EV_SW, EV_DT, EV_CLK, 0)
       logger.info('  Starting display')
-      self.display =    Display()
+      self.display = Display()
 
       self.camera = Picamera2()
-      config = self.camera.create_preview_configuration(main={"format": "RAW12"})
-      self.camera.configure(config)
+      self.preview_config = self.camera.create_preview_configuration(
+         main={"format": "RGB888", "size": (400, 300)}
+      )
+      self.still_config = self.camera.create_still_configuration(
+         main={"size": (4056, 3040), "format": "RGB888"},
+         raw={"size": (4056, 3040)},
+      )
+      self.camera.configure(self.preview_config)  # initial config
       logger.info('  Starting camera')
       self.camera.start()
+      time.sleep(3)  # delay for startup
       logger.info('  Setting default controls')
       self.camera.set_controls({
          "ExposureTime": SHUTTER_SPEEDS[10],
@@ -82,7 +87,7 @@ class Camera:
                self.display.show_capture(self.last_file)
                self.preview_started = True
          else: 
-            self.display.show_viewfinder()
+            self.display.show_viewfinder(self.camera)
 
       if state == BLANK:
          self.display.blank_screen()
@@ -93,19 +98,16 @@ class Camera:
    
    def capture(self, path):
 
-      filename = path + f"/RPC_{datetime.now().strftime('%H%M%S')}.raw"
-      logger.info("Saving capture in " + filename)
-      self.camera.capture_file(filename)
-
-      logger.info("Converting to TIFF")
-      raw_image = np.fromfile(filename, dtype=np.uint16)
-      raw_image = raw_image.reshape((3040, 4056))
-      im = Image.fromarray(raw_image)
-      filename = filename[:-3] + "tiff"
-      im.save(filename)
-      logger.info("Saved conversion in " + filename)
-      self.last_file = filename
-      # remove original raw? nah
+      self.camera.configure(self.still_config)
+      filename = path + f"/RPC_{datetime.now().strftime('%H%M%S')}"
+      filename_dng = filename + ".dng"
+      filename_jpg = filename + ".jpg"
+      logger.info("Saving capture in " + filename_dng)
+      self.camera.capture_file(filename_dng)
+      logger.info("Saving capture in " + filename_jpg)
+      self.camera.capture_file(filename_jpg)
+      self.last_file = filename_jpg
+      self.camera.configure(self.preview_config)
 
    def set_capture_time(self, capture_time):
       self.preview_started = False
@@ -139,16 +141,11 @@ def main():
       cam = Camera()
 
       while (True):
-         if GPIO.input(POWER_SWITCH) == GPIO.LOW:
-            logger.info("Power switch hit, shutting down...")
-            os.system("sudo shutdown -h now")
-            break
          capture = cam.check_encoders()
          cam.viewfinder(VF)
          if capture:
             cam.viewfinder(BLANK)
             cam.capture()
-
             cam.set_capture_time(time.now())
 
    finally:
