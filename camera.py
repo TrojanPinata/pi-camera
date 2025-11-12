@@ -82,7 +82,7 @@ class Camera:
 
    def viewfinder(self, state):
       if state == VF:
-         if datetime.now() - self.last_capture_time < PREVIEW_CAPTURE_TIME:
+         if int(datetime.now().strftime("%Y%m%d%H%M%S")) - self.last_capture_time < PREVIEW_CAPTURE_TIME:
             if self.preview_started == False:
                self.display.show_capture(self.last_file)
                self.preview_started = True
@@ -99,7 +99,7 @@ class Camera:
    def capture(self, path):
 
       self.camera.configure(self.still_config)
-      filename = path + f"/RPC_{datetime.now().strftime('%H%M%S')}"
+      filename = path + f"/RPC_{datetime.now().strftime("%Y%m%d%H%M%S")}"
       filename_dng = filename + ".dng"
       filename_jpg = filename + ".jpg"
       logger.info("Saving capture in " + filename_dng)
@@ -146,7 +146,7 @@ def main():
          if capture:
             cam.viewfinder(BLANK)
             cam.capture()
-            cam.set_capture_time(datetime.now())
+            cam.set_capture_time(datetime.now().strftime("%Y%m%d%H%M%S"))
 
    finally:
       cam.camera.close()

@@ -33,7 +33,9 @@ class Display:
       self.disp = st7735.ST7735R(self.spi, rotation=90, cs=DISPLAY_CS, dc=DISPLAY_DC, rst=DISPLAY_RST, baudrate=24000000)
       self.width = self.disp.width
       self.height = self.disp.height
+      print(str(self.width) + " " + str(self.height))
       self.ss_string = SHUTTER_SPEED_STRINGS[10]
+      self.ev_string = ISO_STRINGS[0]
 
    def update_params(self, ss_index, ev_index):
       self.ss_string = SHUTTER_SPEED_STRINGS[ss_index]
@@ -43,7 +45,8 @@ class Display:
    def black_screen(self):
       width = self.disp.width
       height = self.disp.height
-      image = Image.new("RGB", (width, height))
+      image = Image.new("RGB", (width - 1, height - 1))
+      image = image.resize((width - 1, height - 1))
       self.disp.image(image)
 
 

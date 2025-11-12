@@ -30,7 +30,7 @@ class Encoder:
 
 
    def check_switch(self):
-      if GPIO.input(self.sw) == 1:
+      if GPIO.input(self.sw) == 0:
          return True
       return False
    
