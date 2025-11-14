@@ -40,7 +40,7 @@ class Camera:
 
       self.camera = Picamera2()
       self.preview_config = self.camera.create_preview_configuration(
-         main={"format": "RGB888", "size": (400, 300)}
+         main={"format": "RGB888", "size": (320, 240)}
       )
       self.still_config = self.camera.create_still_configuration(
          main={"size": (4056, 3040), "format": "RGB888"},
@@ -153,6 +153,7 @@ def main():
             cam.viewfinder(BLANK)
             cam.capture(path)
             cam.set_capture_time(datetime.now().strftime("%Y%m%d%H%M%S"))
+         time.sleep(0.03)  # stability
 
    finally:
       cam.camera.close()
