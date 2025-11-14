@@ -100,18 +100,27 @@ class Camera:
       print("Capturing image...")
       self.camera.stop()
       self.camera.configure(self.still_config)
+      filename = path + f"/DCIM/RPC_{datetime.now().strftime("%Y%m%d%H%M%S")}"
+      filename_dng = filename + ".dng"
+      filename_jpg = filename + ".jpg"
       self.camera.start()
 
-      filename = path + f"/DCIM/RPC_{datetime.now().strftime("%Y%m%d%H%M%S")}"
-      #filename_dng = filename + ".dng"
-      filename_jpg = filename + ".jpg"
+      #logger.info("Saving capture in " + filename_jpg)
+      #self.camera.capture_file(filename_jpg)
+      #logger.info("Saving capture in " + filename) # the order of these matters, since raw takes longer to capture
+      #self.camera.capture_file(filename, 'raw')    # there will be a difference between the shots if not in this order
+
+      request = self.camera.capture_request()
+      rgb = request.make_array("main")
       logger.info("Saving capture in " + filename_jpg)
-      self.camera.capture_file(filename_jpg)
-      logger.info("Saving capture in " + filename) # the order of these matters, since raw takes longer to capture
-      self.camera.capture_file(filename, 'raw')    # there will be a difference between the shots if not in this order
-      self.last_file = filename_jpg
+      img = Image.fromarray(rgb)
+      img.save(filename_jpg, quality=95)
+      logger.info("Saving capture in " + filename_dng)
+      request.save_dng(filename_dng)
+
 
       self.camera.stop()
+      self.last_file = filename_jpg
       self.camera.configure(self.preview_config)
       self.camera.start()
 

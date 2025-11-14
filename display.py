@@ -55,6 +55,9 @@ class Display:
          image = image.rotate(270, expand=True)
          image = image.resize((self.disp.width, self.disp.height), Image.LANCZOS)
          image = image.convert("RGB")
+         image = image.convert("RGB")
+         r, g, b = image.split()
+         image = Image.merge("RGB", (b, g, r))
          ss_text = f"{self.ss_string}s"
          ev_text = f"ISO {self.ev_string}"
          print(ss_text + " " + ev_text)
@@ -67,7 +70,9 @@ class Display:
 
    def show_viewfinder(self, camera):
       try:
-         frame = camera.capture_array("main")
+         request = camera.capture_request()
+         frame = request.make_array("main")
+         request.release()
          image = Image.fromarray(frame)
          image = image.rotate(270, expand=True)
          image = image.resize((self.disp.width, self.disp.height), Image.LANCZOS)
