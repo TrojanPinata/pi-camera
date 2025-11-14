@@ -1,0 +1,14 @@
+[Unit]
+Description=Camera Runtime
+After=multi-user.target
+
+[Service]
+ExecStart=/usr/bin/python3 /home/moe/pi-camera/camera.py
+WorkingDirectory=/home/moe/pi-camera
+Restart=always
+RestartSec=2
+User=moe
+Environment=PYTHONBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target

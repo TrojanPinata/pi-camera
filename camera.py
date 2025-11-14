@@ -105,10 +105,10 @@ class Camera:
       filename = path + f"/DCIM/RPC_{datetime.now().strftime("%Y%m%d%H%M%S")}"
       #filename_dng = filename + ".dng"
       filename_jpg = filename + ".jpg"
-      logger.info("Saving capture in " + filename)
-      self.camera.capture_file(filename, 'raw')
       logger.info("Saving capture in " + filename_jpg)
       self.camera.capture_file(filename_jpg)
+      logger.info("Saving capture in " + filename) # the order of these matters, since raw takes longer to capture
+      self.camera.capture_file(filename, 'raw')    # there will be a difference between the shots if not in this order
       self.last_file = filename_jpg
 
       self.camera.stop()
