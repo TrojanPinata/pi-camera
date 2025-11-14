@@ -105,19 +105,20 @@ class Camera:
       filename_jpg = filename + ".jpg"
       self.camera.start()
 
-      #logger.info("Saving capture in " + filename_jpg)
-      #self.camera.capture_file(filename_jpg)
-      #logger.info("Saving capture in " + filename) # the order of these matters, since raw takes longer to capture
-      #self.camera.capture_file(filename, 'raw')    # there will be a difference between the shots if not in this order
-
-      request = self.camera.capture_request()
-      rgb = request.make_array("main")
       logger.info("Saving capture in " + filename_jpg)
-      img = Image.fromarray(rgb)
-      img.save(filename_jpg, quality=95)
-      logger.info("Saving capture in " + filename_dng)
-      request.save_dng(filename_dng)
+      self.camera.capture_file(filename_jpg)
+      logger.info("Saving capture in " + filename) # the order of these matters, since raw takes longer to capture
+      self.camera.capture_file(filename, 'raw')    # there will be a difference between the shots if not in this order
 
+      # better method, doesn't work
+      #request = self.camera.capture_request()
+      #rgb = request.make_array("main")
+      #logger.info("Saving capture in " + filename_jpg)
+      #img = Image.fromarray(rgb)
+      #img.save(filename_jpg, quality=95)
+      #logger.info("Saving capture in " + filename_dng)
+      #request.save_dng(filename_dng)
+      #request.release()
 
       self.camera.stop()
       self.last_file = filename_jpg
