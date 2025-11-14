@@ -37,9 +37,9 @@ class Encoder:
    
    def check_encoder(self):
       clk_state = GPIO.input(self.clk)
-      dt_state = GPIO.input(self.dt)
-      if clk_state != self.last_state:
-         if dt_state == clk_state:
+      if clk_state != self.last_state and clk_state == 1:
+         dt_state = GPIO.input(self.dt)
+         if dt_state != clk_state:
             self.index += 1
          else:
             self.index -= 1

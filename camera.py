@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 GPIO.setmode(GPIO.BCM)
 
 OUTPUT_PATH = "/mnt/tft"
-BACKUP_OUTPUT_PATH = "~"
+BACKUP_OUTPUT_PATH = "/home/moe" # user folder
 
 WHITE_BALANCE =   "auto"
 DENOISE =         "auto"
@@ -67,7 +67,7 @@ class Camera:
 
    def check_encoders(self):
 
-      print(self.ss_encoder.check_switch())
+      #print(self.ss_encoder.check_switch())
       capture = self.ss_encoder.check_switch()
       ev_index = self.ev_encoder.check_encoder()
       ss_index = self.ss_encoder.check_encoder()

@@ -7,7 +7,7 @@ from adafruit_rgb_display import st7735
 
 # UART Reserved = 14, 15
 
-PREVIEW_CAPTURE_TIME = 3
+PREVIEW_CAPTURE_TIME = 6
 
 # states
 VF       = 0
@@ -52,6 +52,7 @@ class Display:
    def show_capture(self, filename):
       try:
          image = Image.open(filename)
+         image = image.rotate(270, expand=True)
          image = image.resize((self.disp.width, self.disp.height), Image.LANCZOS)
          image = image.convert("RGB")
          ss_text = f"{self.ss_string}s"
@@ -68,6 +69,7 @@ class Display:
       try:
          frame = camera.capture_array("main")
          image = Image.fromarray(frame)
+         image = image.rotate(270, expand=True)
          image = image.resize((self.disp.width, self.disp.height), Image.LANCZOS)
          image = image.convert("RGB")
          draw = ImageDraw.Draw(image)
